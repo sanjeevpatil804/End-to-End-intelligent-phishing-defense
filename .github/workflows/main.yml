@@ -47,8 +47,19 @@ jobs:
 
       - name: Create ECR repository if it doesn't exist
         run: |
-          aws ecr describe-repositories --repository-names ${{ secrets.ECR_REPOSITORY_NAME }} 2>/dev/null || \
-          aws ecr create-repository --repository-name ${{ secrets.ECR_REPOSITORY_NAME }} --region ${{ secrets.AWS_REGION }}
+          echo "Checking for repository: ${{ secrets.ECR_REPOSITORY_NAME }}"
+          if aws ecr describe-repositories --repository-names ${{ secrets.ECR_REPOSITORY_NAME }} 2>/dev/null; then
+            echo "Repository already exists"
+          else
+            echo "Creating repository: ${{ secrets.ECR_REPOSITORY_NAME }}"
+            aws ecr create-repository --repository-name ${{ secrets.ECR_REPOSITORY_NAME }} --region ${{ secrets.AWS_REGION }}
+            echo "Repository created successfully"
+          fi
+          
+      - name: Verify ECR repository exists
+        run: |
+          echo "Verifying repository exists..."
+          aws ecr describe-repositories --repository-names ${{ secrets.ECR_REPOSITORY_NAME }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -61,6 +72,11 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: latest
         run: |
+          echo "Building image..."
+          echo "ECR_REGISTRY: $ECR_REGISTRY"
+          echo "ECR_REPOSITORY: $ECR_REPOSITORY"
+          echo "Full image name: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          
           # Build a docker container and push it to ECR
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -84,24 +100,17 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
       
-      - name: Pull latest images with retry
+      - name: Debug ECR information
         run: |
-          max_attempts=5
-          attempt=1
-          while [ $attempt -le $max_attempts ]; do
-            echo "Attempt $attempt of $max_attempts..."
-            if docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest; then
-              echo "Successfully pulled image"
-              break
-            fi
-            if [ $attempt -eq $max_attempts ]; then
-              echo "Failed to pull image after $max_attempts attempts"
-              exit 1
-            fi
-            echo "Pull failed, waiting 10 seconds before retry..."
-            sleep 10
-            attempt=$((attempt + 1))
-          done
+          echo "AWS_ECR_LOGIN_URI: ${{secrets.AWS_ECR_LOGIN_URI}}"
+          echo "ECR_REPOSITORY_NAME: ${{ secrets.ECR_REPOSITORY_NAME }}"
+          echo "Full image path: ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest"
+          echo "Listing ECR repositories..."
+          aws ecr describe-repositories --region ${{ secrets.AWS_REGION }}
+      
+      - name: Pull latest images
+        run: |
+          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
          
       - name: Stop and remove container if running
         run: |
