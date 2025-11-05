@@ -12,8 +12,9 @@ RUN apt-get update -y && \
     awscli && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy only requirements first (better caching)
-COPY requirements.txt .
+# Copy requirements and setup files first (better caching)
+COPY requirements.txt Setup.py ./
+COPY networksecurity/__init__.py networksecurity/__init__.py
 
 # Upgrade pip and install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
