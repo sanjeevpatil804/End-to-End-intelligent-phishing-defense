@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/674006582355670813/6715adcfda1245649ddbf0f4f1cb34b9/artifacts
+end_time: 1762265333413
+entry_point_name: ''
+experiment_id: '674006582355670813'
+lifecycle_stage: active
+run_id: 6715adcfda1245649ddbf0f4f1cb34b9
+run_name: Training_20251104_150824
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762265304078
+status: 3
+tags: []
+user_id: sanjeevpatil
