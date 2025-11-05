@@ -17,8 +17,10 @@ COPY requirements.txt Setup.py ./
 COPY networksecurity/__init__.py networksecurity/__init__.py
 
 # Upgrade pip and install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir -r requirements.txt || \
+    (echo "=== PIP INSTALL FAILED - Trying without -e . ===" && \
+     pip install --no-cache-dir python-dotenv pandas numpy scipy scikit-learn xgboost mlflow optuna optuna-dashboard fastapi uvicorn python-multipart Jinja2 starlette pymongo[srv] certifi PyYAML)
 
 # Copy application code
 COPY . .
