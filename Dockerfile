@@ -1,13 +1,5 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-slim-bullseye
 WORKDIR /app
-
-# Install system dependencies needed for Python packages
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    make \
-    libgomp1 \
-    && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better layer caching
 COPY requirements.txt .
