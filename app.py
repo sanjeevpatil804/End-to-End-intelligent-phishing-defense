@@ -11,6 +11,7 @@ print(mongo_db_url)
 import pymongo
 from networksecurity.Exception.exception import NetworkSecurityException
 
+from networksecurity.pipeline.training_pipeline import TrainingPipeline
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, File, UploadFile,Request
@@ -28,7 +29,6 @@ client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
 
 from networksecurity.constants.training_pipeline import DATA_INGESTION_COLLECTION_NAME
 from networksecurity.constants.training_pipeline import DATA_INGESTION_DATABASE_NAME
-
 
 database = client[DATA_INGESTION_DATABASE_NAME]
 collection = database[DATA_INGESTION_COLLECTION_NAME]
@@ -65,10 +65,11 @@ async def predict_route(request: Request,file: UploadFile = File(...)):
         print(y_pred)
         df['predicted_column'] = y_pred
         print(df['predicted_column'])
-  
+        #df['predicted_column'].replace(-1, 0)
+        #return df.to_json()
         df.to_csv('prediction_output/output.csv')
         table_html = df.to_html(classes='table table-striped')
-      
+        #print(table_html)
         return templates.TemplateResponse("table.html", {"request": request, "table": table_html})
         
     except Exception as e:
@@ -76,4 +77,4 @@ async def predict_route(request: Request,file: UploadFile = File(...)):
 
     
 if __name__=="__main__":
-    app_run(app,host="0.0.0.0",port=5001)
+    app_run(app,host="0.0.0.0",port=8080)
