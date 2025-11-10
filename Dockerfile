@@ -1,12 +1,11 @@
 FROM python:3.10-slim-bullseye
 WORKDIR /app
 
-# Copy requirements first for better layer caching
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy application code
+# Copy application code first (needed for -e . in requirements)
 COPY . .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port your app runs on
 EXPOSE 8080
