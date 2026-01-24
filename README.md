@@ -6,7 +6,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)](https://www.docker.com/)
 [![AWS](https://img.shields.io/badge/AWS-Deployed-orange.svg)](https://aws.amazon.com/)
 
-A production-ready machine learning system for intelligent phishing website detection using advanced feature engineering, automated hyperparameter optimization, and MLOps best practices. This end-to-end solution leverages 30 carefully engineered features to identify malicious URLs with high accuracy, deployed on AWS with CI/CD automation.
+A production-ready machine learning system for intelligent phishing website detection using advanced feature engineering, automated hyperparameter optimization, and MLOps best practices. This end-to-end solution leverages 10,000 carefully engineered features to identify malicious URLs with high accuracy, deployed on AWS with CI/CD automation.
 
 ---
 
