@@ -90,14 +90,14 @@ The system achieves high precision and recall in detecting phishing attempts, ma
          │
          ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Data Ingestion Component                    │
+│              Data Ingestion Component                   │
 │  • Fetch data from MongoDB                              │
 │  • Create train/test split                              │
 └────────┬────────────────────────────────────────────────┘
          │
          ▼
 ┌─────────────────────────────────────────────────────────┐
-│           Data Validation Component                      │
+│           Data Validation Component                     │
 │  • Validate schema (30 features)                        │
 │  • Check data quality                                   │
 │  • Detect data drift                                    │
@@ -105,7 +105,7 @@ The system achieves high precision and recall in detecting phishing attempts, ma
          │
          ▼
 ┌─────────────────────────────────────────────────────────┐
-│        Data Transformation Component                     │
+│        Data Transformation Component                    │
 │  • KNN Imputation for missing values                    │
 │  • Feature preprocessing pipeline                       │
 │  • Save preprocessor object                             │
@@ -113,7 +113,7 @@ The system achieves high precision and recall in detecting phishing attempts, ma
          │
          ▼
 ┌─────────────────────────────────────────────────────────┐
-│            Model Trainer Component                       │
+│            Model Trainer Component                      │
 │  • Optuna hyperparameter optimization                   │
 │  • Random Forest & XGBoost comparison                   │
 │  • Best model selection (F1-Score)                      │
@@ -122,7 +122,7 @@ The system achieves high precision and recall in detecting phishing attempts, ma
          │
          ▼
 ┌─────────────────────────────────────────────────────────┐
-│               Prediction Pipeline                        │
+│               Prediction Pipeline                       │
 │  • Load trained model & preprocessor                    │
 │  • Batch prediction API endpoint                        │
 │  • HTML table visualization                             │
